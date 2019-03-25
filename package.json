@@ -15,6 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "koa": "^2.7.0",
+    "koa-onerror": "^4.1.0",
     "koa-route": "^3.2.0",
     "koa-static": "^5.0.0",
     "supervisor": "^0.12.0"
