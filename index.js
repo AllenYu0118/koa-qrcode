@@ -23,12 +23,11 @@ const qrcode = async ctx => {
         console.log('请传递data数据')
     }
 
-    let { size, margin, scale, dark, light } = query
+    let { size, margin, dark, light } = query
 
     return await generateQR(query.data, {
         width: size,
         margin,
-        scale,
         color: {
             dark,
             light
@@ -43,20 +42,22 @@ const logger = async (ctx, next) => {
 }
 
 app.use(logger)
-app.use(route.get('/', async (ctx, next) => {
-    ctx.response.type = 'html'
-    ctx.response.body = fs.createReadStream('./public/index.html');
-}))
 
-app.use(route.get('/qrcode', async (ctx, next) => {
+
+app.use(route.get('/', async (ctx, next) => {
     let url = await qrcode(ctx)
     ctx.response.type = 'png'
     ctx.response.body = Buffer.from(url.split(',')[1], 'base64')
+}))
+
+app.use(route.get('*', async (ctx, next) => {
+    ctx.response.type = 'html'
+    ctx.response.body = fs.createReadStream('./public/index.html');
 }))
 
 
 app.use(staticPath)
 
 app.listen(9527, () => {
-    console.log(`服务已开启, 端口 9527, https:localhost:9527`)
+    console.log(`服务已开启, 端口 9527, http://localhost:9527/`)
 })
